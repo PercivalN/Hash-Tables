@@ -1,5 +1,5 @@
 # Hash Tables
-
+# Change a little
 ## Day 1
 
 Implement a basic hash table without collision resolution.
