@@ -47,6 +47,22 @@ class HashTable:
 
         Implement this.
         """
+        
+        index = self._hash_mod(key)
+        new_Node = LinkedPair(key, value)
+        # if self.storage[index] is None:
+        self.storage[index] = new_Node
+        # else:
+        #     existing_Node = self.storage[index]
+        #     while existing_Node is not None:
+        #         if existing_Node.key == key:
+        #             existing_Node.value = value
+        #         elif existing_Node.next is not None:
+        #             existing_Node = existing_Node.next
+        #         else:
+        #             existing_Node.next = new_Node
+        
+            
 
     def delete(self, key):
         """
@@ -57,6 +73,10 @@ class HashTable:
         Implement this.
         """
 
+        index = self._hash_mod(key)
+        self.storage[index] = None
+
+
     def get(self, key):
         """
         Retrieve the value stored with the given key.
@@ -66,6 +86,10 @@ class HashTable:
         Implement this.
         """
 
+        index = self._hash_mod(key)
+        return self.storage[index].value
+
+        
     def resize(self):
         """
         Doubles the capacity of the hash table and
