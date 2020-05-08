@@ -77,7 +77,7 @@ class HashTable:
 
         Implement this.
         """
-        #self.size_check()
+        self.size_check()
         hashed_key = self._hash_index(key)
         new_linked_pair = HashTableEntry(key, value)
 
@@ -133,7 +133,7 @@ class HashTable:
         # the .next pointer of the previous node to be the node that its .next pointer was pointing to.
         prev.next = node.next
         self.number_keys -= 1
-        #self.size_check()
+        self.size_check()
         
     def get(self, key):
         """
@@ -182,7 +182,37 @@ class HashTable:
                 new_storage[hashed_key] = node
                 node = node.next
         self.storage = new_storage
+    
+    def shrink(self):
+        '''
+        Halves the capacity of the hash table and
+        rehashes all key/value pairs.
+        '''
+        self.capacity = self.capacity // 2
+        self.make_new_storage()
         
+    def size_check(self):
+        '''
+        Update your HashTable to automatically double in size when it grows past a load factor of 0.7
+        and half in size when it shrinks past a load factor of 0.2.
+        This (I assume the halving) should only occur 
+        if the HashTable has been resized past the initial size.
+
+        '''
+        # num_entries = sum(x is not None for x in self.storage)
+        # print('num_entries: ' + str(num_entries))
+        # load_factor = num_entries/self.capacity
+        load_factor = self.number_keys/self.capacity
+        # print('load factor: ' + str(load_factor))
+
+        if load_factor > 0.7:
+            # print('Time to increase the capacity; load factor is ' + str(load_factor))
+            self.resize()
+
+        if self.capacity > self.initial_capacity:
+            if load_factor < 0.2 and self.capacity // 2 >= 8:  # 128
+                # print('time to shrink the hashtable in half')
+                self.shrink()
 
 if __name__ == "__main__":
     ht = HashTable(2)
