@@ -93,7 +93,7 @@ class HashTable:
 
         if node is None:
             prev.next = new_linked_pair
-            self.num_keys += 1
+            self.number_keys += 1
 
         else:
             # The key was found, so update the value
@@ -132,8 +132,8 @@ class HashTable:
         # Remove the LinkedPair node from the chain by assigning
         # the .next pointer of the previous node to be the node that its .next pointer was pointing to.
         prev.next = node.next
-        self.num_keys -= 1
-        self.size_check()
+        self.number_keys -= 1
+        #self.size_check()
         
     def get(self, key):
         """
