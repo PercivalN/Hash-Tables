@@ -7,7 +7,8 @@ class HashTableEntry:
         self.key = key
         self.value = value
         self.next = None
-
+        
+    
 
 class HashTable:
     """
@@ -16,13 +17,39 @@ class HashTable:
 
     Implement this.
     """
+    
+    def __init__(self, capacity):
+        self.capacity = capacity    # Sets the number of buckets in the hash table
+        self.storage = [None] * capacity
+        self.initial_capacity = capacity
+        self.number_keys = 0
 
     def fnv1(self, key):
         """
         FNV-1 64-bit hash function
+        
+        For 64-bit:
+            FNV_prime = 2^40 + 2^8 + 0xb3
+            offset_basis = 14695981039346656037
+
+        XOR operator ^
+
+        hash = offset_basis
+        for each octet_of_data to be hashed
+            hash = hash * FNV_prime
+            hash = hash xor octet_of_data
+        return hash
 
         Implement this, and/or DJB2.
         """
+        
+        FNV_prime = 2**40 + 2**8 + 0xb3
+        hash = 14695981039346656037
+        for x in key:
+            hash = hash * FNV_prime
+            hash = hash ^ ord(x)
+        return hash & 0xFFFFFFFFFFFFFFFF
+        
 
     def djb2(self, key):
         """
@@ -30,6 +57,10 @@ class HashTable:
 
         Implement this, and/or FNV-1.
         """
+        hash = 5381
+        for x in key:
+            hash = ((hash << 5) + hash) + ord(x)
+        return hash & 0xFFFFFFFF
 
     def hash_index(self, key):
         """
@@ -38,6 +69,8 @@ class HashTable:
         """
         #return self.fnv1(key) % self.capacity
         return self.djb2(key) % self.capacity
+    
+    
 
     def put(self, key, value):
         """
@@ -48,20 +81,7 @@ class HashTable:
         Implement this.
         """
         
-        index = self._hash_mod(key)
-        new_Node = LinkedPair(key, value)
-        # if self.storage[index] is None:
-        self.storage[index] = new_Node
-        # else:
-        #     existing_Node = self.storage[index]
-        #     while existing_Node is not None:
-        #         if existing_Node.key == key:
-        #             existing_Node.value = value
-        #         elif existing_Node.next is not None:
-        #             existing_Node = existing_Node.next
-        #         else:
-        #             existing_Node.next = new_Node
-        
+       
             
 
     def delete(self, key):
@@ -73,8 +93,7 @@ class HashTable:
         Implement this.
         """
 
-        index = self._hash_mod(key)
-        self.storage[index] = None
+        
 
 
     def get(self, key):
@@ -86,8 +105,11 @@ class HashTable:
         Implement this.
         """
 
-        index = self._hash_mod(key)
-        return self.storage[index].value
+        index = self._index_For_Key(key)
+        if index is not None:
+            return self.storage[index].get_Value_For_Key(key)
+        else:
+            return None 
 
         
     def resize(self):
@@ -97,6 +119,8 @@ class HashTable:
 
         Implement this.
         """
+       
+        
 
 if __name__ == "__main__":
     ht = HashTable(2)
