@@ -165,7 +165,23 @@ class HashTable:
 
         Implement this.
         """
+        self.capacity = self.capacity * 2
+        self.make_new_storage()
        
+    def make_new_storage(self):
+        new_storage = [None] * self.capacity
+
+        for i in range(len(self.storage)):
+            # print(f'at index {i} in self.storage')
+            node = self.storage[i]
+
+            while node is not None:
+                # traverse the LL to rehash each key/value pair
+                # print("At key: " + str(node.key))
+                hashed_key = self._hash_index(node.key)
+                new_storage[hashed_key] = node
+                node = node.next
+        self.storage = new_storage
         
 
 if __name__ == "__main__":
